@@ -1,3 +1,7 @@
+import subprocess
+import sys
+subprocess.run([sys.executable, "-m", "pip", "install", "plotly", "numpy"], check=True)
+
 import streamlit as st
 import base64, numpy as np
 from pathlib import Path
