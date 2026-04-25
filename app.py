@@ -45,7 +45,7 @@ st.markdown("""
 :root{
     --v:#7C3AED; --v2:#A78BFA;
     --b:#3B82F6; --g:#10B981;
-    --dark:#000000; --dark2:#0D0D0D; --dark3:#111111;
+    --dark:#000000; --dark2:#0D0D0D;
     --card:#1A1A2E; --card2:#16213E;
     --border:rgba(124,58,237,0.4);
     --text:#F1F5F9; --text2:#94A3B8;
@@ -70,22 +70,14 @@ st.markdown("""
     -webkit-text-fill-color:transparent;background-clip:text;}
 .app-sub{font-size:0.62rem;color:var(--text2);font-style:italic;}
 
-.bnav{position:fixed;bottom:0;left:0;right:0;z-index:998;
-    background:var(--dark2);border-top:1px solid var(--border);
-    display:flex;padding:8px 0 12px;
-    box-shadow:0 -4px 20px rgba(124,58,237,0.2);}
-.bni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
-    font-size:0.6rem;font-weight:700;text-transform:uppercase;
-    letter-spacing:0.5px;color:var(--text2);}
-.bni.on{color:var(--v2);}
-.bni-icon{font-size:1.4rem;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);}
-.bni.on .bni-icon{transform:translateY(-3px);}
+.nav-bar{background:var(--dark2);border-bottom:1px solid var(--border);
+    padding:8px 16px;position:sticky;top:72px;z-index:998;}
 
-.page{padding:20px 20px 90px;max-width:700px;margin:0 auto;animation:fadeUp 0.3s ease;}
+.page{padding:20px 20px 40px;max-width:700px;margin:0 auto;animation:fadeUp 0.3s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 .hero-role{min-height:88vh;display:flex;flex-direction:column;
-    align-items:center;justify-content:center;text-align:center;padding:30px 20px 90px;}
+    align-items:center;justify-content:center;text-align:center;padding:30px 20px;}
 .big-title{font-size:3rem;font-weight:900;letter-spacing:-2px;line-height:1;
     background:var(--grad);-webkit-background-clip:text;
     -webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
@@ -97,8 +89,7 @@ st.markdown("""
 .rcard{background:var(--card);border:2px solid var(--border);border-radius:20px;
     padding:28px 32px;cursor:pointer;min-width:155px;text-align:center;
     transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);box-shadow:var(--shadow);}
-.rcard:hover{border-color:var(--v2);transform:translateY(-8px) scale(1.04);
-    box-shadow:0 20px 50px rgba(124,58,237,0.4);}
+.rcard:hover{border-color:var(--v2);transform:translateY(-8px) scale(1.04);}
 .rc-icon{font-size:2.8rem;margin-bottom:10px;display:block;}
 .rc-lbl{font-size:1rem;font-weight:700;color:var(--text);}
 .rc-desc{font-size:0.72rem;color:var(--text2);margin-top:5px;line-height:1.5;}
@@ -106,11 +97,7 @@ st.markdown("""
 .hero-card{
     background:linear-gradient(135deg,#0D0D2B 0%,#1A0A3D 50%,#0A1F0A 100%);
     border:1px solid var(--border);border-radius:22px;
-    padding:28px;margin-bottom:20px;position:relative;overflow:hidden;
-}
-.hero-card::before{content:'';position:absolute;top:-40px;right:-40px;
-    width:150px;height:150px;border-radius:50%;
-    background:radial-gradient(circle,rgba(124,58,237,0.3) 0%,transparent 70%);}
+    padding:28px;margin-bottom:20px;position:relative;overflow:hidden;}
 
 .feat-item{display:flex;align-items:center;gap:12px;
     padding:14px;background:rgba(255,255,255,0.04);
@@ -118,8 +105,7 @@ st.markdown("""
     border-radius:14px;margin-bottom:10px;transition:all 0.3s;}
 .feat-item:hover{background:rgba(124,58,237,0.1);border-color:var(--border);}
 .feat-icon{width:44px;height:44px;border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:1.3rem;flex-shrink:0;}
+    display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;}
 .feat-title{font-size:0.9rem;font-weight:700;color:var(--text);}
 .feat-desc{font-size:0.73rem;color:var(--text2);margin-top:2px;}
 
@@ -196,12 +182,12 @@ st.markdown("""
     background:var(--grad);-webkit-background-clip:text;
     -webkit-text-fill-color:transparent;background-clip:text;}
 
+/* NAV BUTTONS COLORS */
 div[data-testid="stButton"]>button{
     background:var(--grad)!important;color:#fff!important;border:none!important;
     border-radius:12px!important;font-family:'Poppins',sans-serif!important;
     font-weight:600!important;transition:all 0.25s cubic-bezier(0.34,1.56,0.64,1)!important;
-    box-shadow:0 4px 16px rgba(124,58,237,0.4)!important;
-    letter-spacing:0.3px!important;}
+    box-shadow:0 4px 16px rgba(124,58,237,0.4)!important;}
 div[data-testid="stButton"]>button:hover{
     transform:translateY(-2px) scale(1.02)!important;
     box-shadow:0 8px 28px rgba(124,58,237,0.6)!important;}
@@ -213,12 +199,10 @@ div[data-testid="stButton"]>button:active{transform:scale(0.97)!important;}
 .stTabs [data-baseweb="tab"]{border-radius:8px!important;color:var(--text2)!important;font-weight:600!important;}
 .stTabs [aria-selected="true"]{background:var(--grad)!important;color:#fff!important;}
 hr{border:none;height:1px;background:var(--border);margin:14px 0;}
-
-/* Cache les boutons streamlit dans la nav */
-.nav-hidden{display:none!important;}
 </style>
 """, unsafe_allow_html=True)
 
+# ── HELPERS ──────────────────────────────────────────
 def topbar():
     li = f'<img src="{logo_src}" class="logo-img"/>' if logo_src else "🚖"
     st.markdown(f"""
@@ -233,6 +217,76 @@ def topbar():
         <div style="font-size:0.65rem;color:var(--text2);">{APP_VERSION}</div>
     </div>""", unsafe_allow_html=True)
 
+def nav_passager(active):
+    colors = ["#A78BFA","#FCA5A5","#FCD34D","#6EE7B7","#F9A8D4"]
+    items = [
+        ("🏠 Accueil","accueil"),
+        ("📝 Collecte","collecte"),
+        ("📋 Courses","mes_courses"),
+        ("👥 Passagers","liste_passagers"),
+        ("📊 Analyse","analyse"),
+    ]
+    cols = st.columns(5)
+    for i,(lbl,key) in enumerate(items):
+        c = colors[i]
+        is_on = active == key
+        bg = f"rgba({int(c[1:3],16)},{int(c[3:5],16)},{int(c[5:7],16)},0.25)" if is_on else f"rgba({int(c[1:3],16)},{int(c[3:5],16)},{int(c[5:7],16)},0.08)"
+        st.markdown(f"""
+        <style>
+        div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button {{
+            background: {bg} !important;
+            border: 2px solid {c} !important;
+            color: {c} !important;
+            box-shadow: {"0 0 14px " + c + "60" if is_on else "none"} !important;
+            border-radius: 14px !important;
+            font-size: 0.68rem !important;
+            font-weight: 700 !important;
+            padding: 8px 2px !important;
+        }}
+        </style>""", unsafe_allow_html=True)
+        with cols[i]:
+            if st.button(lbl, key=f"pnav_{key}", use_container_width=True):
+                st.session_state.page_passager = key
+                if key == "collecte":
+                    st.session_state.step=1
+                    st.session_state.form={}
+                    st.session_state.submitted=False
+                st.rerun()
+    st.markdown("<hr style='margin:6px 0 14px;border-color:rgba(124,58,237,0.25);'/>", unsafe_allow_html=True)
+
+def nav_chauffeur(active):
+    colors = ["#A78BFA","#FCA5A5","#FCD34D","#6EE7B7","#F9A8D4"]
+    items = [
+        ("🏠 Accueil","c_accueil"),
+        ("🚖 Courses","c_courses"),
+        ("📋 Trajets","c_mes"),
+        ("🚘 Chauffeurs","c_liste"),
+        ("👤 Profil","c_profil"),
+    ]
+    cols = st.columns(5)
+    for i,(lbl,key) in enumerate(items):
+        c = colors[i]
+        is_on = active == key
+        bg = f"rgba({int(c[1:3],16)},{int(c[3:5],16)},{int(c[5:7],16)},0.25)" if is_on else f"rgba({int(c[1:3],16)},{int(c[3:5],16)},{int(c[5:7],16)},0.08)"
+        st.markdown(f"""
+        <style>
+        div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button {{
+            background: {bg} !important;
+            border: 2px solid {c} !important;
+            color: {c} !important;
+            box-shadow: {"0 0 14px " + c + "60" if is_on else "none"} !important;
+            border-radius: 14px !important;
+            font-size: 0.68rem !important;
+            font-weight: 700 !important;
+            padding: 8px 2px !important;
+        }}
+        </style>""", unsafe_allow_html=True)
+        with cols[i]:
+            if st.button(lbl, key=f"cnav_{key}", use_container_width=True):
+                st.session_state.page_chauffeur = key
+                st.rerun()
+    st.markdown("<hr style='margin:6px 0 14px;border-color:rgba(124,58,237,0.25);'/>", unsafe_allow_html=True)
+
 def stepper(cur):
     steps=[("1","Contexte"),("2","Trajet"),("3","Paiement")]
     h='<div class="stepper">'
@@ -245,50 +299,8 @@ def stepper(cur):
     h+='</div>'
     st.markdown(h, unsafe_allow_html=True)
 
-def bottom_nav_p(active):
-    items=[("🏠","accueil","Accueil"),("📝","collecte","Collecte"),
-           ("📋","mes_courses","Courses"),("📊","analyse","Analyse")]
-    h='<div class="bnav">'
-    for ic,k,lb in items:
-        cls="bni on" if active==k else "bni"
-        h+=f'<div class="{cls}"><span class="bni-icon">{ic}</span><span>{lb}</span></div>'
-    h+='</div>'
-    st.markdown(h, unsafe_allow_html=True)
-    st.markdown('<div style="visibility:hidden;height:0;overflow:hidden">', unsafe_allow_html=True)
-    cols=st.columns(4)
-    nav=[("accueil","a"),("collecte","b"),("mes_courses","c"),("analyse","d")]
-    for i,(k,ic) in enumerate(nav):
-        with cols[i]:
-            if st.button(ic, key=f"pn_{k}"):
-                st.session_state.page_passager=k
-                if k=="collecte":
-                    st.session_state.step=1
-                    st.session_state.form={}
-                    st.session_state.submitted=False
-                st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
-
-def bottom_nav_c(active):
-    items=[("🏠","c_accueil","Accueil"),("🚖","c_courses","Courses"),
-           ("📋","c_mes","Trajets"),("👤","c_profil","Profil")]
-    h='<div class="bnav">'
-    for ic,k,lb in items:
-        cls="bni on" if active==k else "bni"
-        h+=f'<div class="{cls}"><span class="bni-icon">{ic}</span><span>{lb}</span></div>'
-    h+='</div>'
-    st.markdown(h, unsafe_allow_html=True)
-    st.markdown('<div style="visibility:hidden;height:0;overflow:hidden">', unsafe_allow_html=True)
-    cols=st.columns(4)
-    nav=[("c_accueil","a"),("c_courses","b"),("c_mes","c"),("c_profil","d")]
-    for i,(k,ic) in enumerate(nav):
-        with cols[i]:
-            if st.button(ic, key=f"cn_{k}"):
-                st.session_state.page_chauffeur=k
-                st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
-
 def back_to_home():
-    if st.button("← Changer de profil", key="back_home"):
+    if st.button("← Changer de profil", key=f"bth_{st.session_state.get('page_passager','')}{st.session_state.get('page_chauffeur','')}"):
         st.session_state.role=None
         st.session_state.chauffeur=None
         st.session_state.page_passager="accueil"
@@ -298,7 +310,7 @@ def back_to_home():
 def field(label):
     st.markdown(f'<span class="flbl">{label}</span>', unsafe_allow_html=True)
 
-# ── ACCUEIL CHOIX RÔLE ──────────────────────────────
+# ── ACCUEIL CHOIX RÔLE ───────────────────────────────
 def page_accueil():
     li = f'<img src="{logo_src}" style="width:100px;filter:drop-shadow(0 0 24px rgba(124,58,237,0.7));animation:float 3s ease-in-out infinite;margin-bottom:16px;"/>' if logo_src else "🚖"
     st.markdown(f"""
@@ -308,7 +320,7 @@ def page_accueil():
         <div class="tag">{APP_TAGLINE}</div>
         <div class="hdiv"></div>
         <div class="choose">Choisissez votre profil pour continuer</div>
-        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;">
             <div class="rcard">
                 <span class="rc-icon">🧑‍💼</span>
                 <div class="rc-lbl">Passager</div>
@@ -339,19 +351,19 @@ def page_accueil():
         st.rerun()
     if st.session_state.show_author:
         st.markdown(f"""
-        <div class="abox">
+        <div class="abox" style="max-width:400px;margin:0 auto;">
             <div style="font-size:1.5rem;margin-bottom:8px;">👩‍💻</div>
             <div class="aname">✦ {AUTHOR} ✦</div>
             <div style="font-size:0.72rem;color:var(--text2);font-family:'Space Mono',monospace;">Matricule · {MATRICULE}</div>
             <div style="font-size:0.68rem;color:var(--text2);margin-top:4px;">{COURS} · {UNIVERSITE}</div>
+            <div style="font-size:0.65rem;color:var(--text2);">UbanDrive {APP_VERSION} · 2024–2025</div>
         </div>""", unsafe_allow_html=True)
 
-# ── PASSAGER ACCUEIL ────────────────────────────────
+# ── PASSAGER ACCUEIL ─────────────────────────────────
 def p_accueil():
     courses=get_courses()
     total=len(courses)
     li=f'<img src="{logo_src}" style="width:32px;vertical-align:middle;margin-right:6px;filter:drop-shadow(0 0 6px rgba(124,58,237,0.6));"/>' if logo_src else "🚖"
-
     st.markdown(f"""
     <div class="page">
     <div class="hero-card">
@@ -368,10 +380,7 @@ def p_accueil():
             border-radius:30px;padding:8px 18px;font-size:0.82rem;font-weight:600;color:var(--v2);">
             🚖 {total} course{"s" if total!=1 else ""} enregistrée{"s" if total!=1 else ""}
         </div>
-    </div>
     </div>""", unsafe_allow_html=True)
-
-    st.markdown('<div class="page" style="padding-top:0">', unsafe_allow_html=True)
 
     feats=[
         ("rgba(124,58,237,0.2)","📝","Collecte intelligente","Enregistrez votre course en 3 étapes simples"),
@@ -388,11 +397,10 @@ def p_accueil():
                 <div class="feat-desc">{desc}</div>
             </div>
         </div>""", unsafe_allow_html=True)
-
     st.markdown('</div>', unsafe_allow_html=True)
     back_to_home()
 
-# ── ÉTAPES COLLECTE ─────────────────────────────────
+# ── ÉTAPES COLLECTE ──────────────────────────────────
 def _step1():
     f=st.session_state.form
     st.markdown('<div class="card"><div class="clbl">👤 Informations Passager</div>', unsafe_allow_html=True)
@@ -553,8 +561,6 @@ def p_mes_courses():
             bcls="bd" if s=="disponible" else ("bc" if s=="en_cours" else "bt")
             btxt="En attente" if s=="disponible" else ("En cours 🚗" if s=="en_cours" else "Terminée ✓")
             ch_info=f'<span class="chip chip-g">🚖 {c["chauffeur"]} · 📞 {c.get("tel_chauffeur","—")}</span>' if c.get("chauffeur") else ""
-            ref=c.get('id','')
-            ts=c.get('timestamp','')
             st.markdown(f"""
             <div class="ccard">
                 <span class="badge2 {bcls}">{btxt}</span>
@@ -568,8 +574,61 @@ def p_mes_courses():
                     <span class="chip">📏 {c.get('distance','?')}</span>
                     {ch_info}
                 </div>
-                <div style="font-size:0.68rem;color:var(--text2);">Réf : {ref} · {ts}</div>
+                <div style="font-size:0.68rem;color:var(--text2);">Réf : {c.get('id','')} · {c.get('timestamp','')}</div>
             </div>""", unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+    back_to_home()
+
+def p_liste_passagers():
+    st.markdown('<div class="page">', unsafe_allow_html=True)
+    st.markdown('<div style="font-size:1.3rem;font-weight:800;margin-bottom:14px;">👥 Liste des Passagers</div>', unsafe_allow_html=True)
+    courses=get_courses()
+    passagers={}
+    for c in courses:
+        tel=c.get("tel","?")
+        if tel not in passagers:
+            passagers[tel]={"nom":c.get("nom","?"),"tel":tel,"courses":[]}
+        passagers[tel]["courses"].append(c)
+
+    if not passagers:
+        st.info("Aucun passager enregistré.")
+    for tel,p in passagers.items():
+        nb=len(p["courses"])
+        courses_html=""
+        for c in p["courses"]:
+            s=c.get("statut","")
+            ch=""
+            if c.get("chauffeur"):
+                ch=f'<br/><span style="font-size:0.7rem;color:#10B981;">🚖 {c["chauffeur"]} · 📞 {c.get("tel_chauffeur","—")}</span>'
+            badge="bd" if s=="disponible" else ("bc" if s=="en_cours" else "bt")
+            btxt="En attente" if s=="disponible" else ("En cours" if s=="en_cours" else "Terminée")
+            courses_html+=f"""
+            <div style="padding:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+                border-radius:8px;margin-bottom:6px;font-size:0.78rem;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <span>📍 {c.get('depart','?')} → 🏁 {c.get('arrivee','?')}</span>
+                    <span class="badge2 {badge}" style="position:relative;top:0;right:0;">{btxt}</span>
+                </div>
+                <div style="color:var(--text2);margin-top:4px;">💵 {c.get('prix',0):,} FCFA · 📏 {c.get('distance','?')}{ch}</div>
+            </div>"""
+
+        st.markdown(f"""
+        <div class="list-item">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <div style="width:42px;height:42px;border-radius:50%;
+                    background:rgba(124,58,237,0.2);display:flex;align-items:center;
+                    justify-content:center;font-size:1.2rem;flex-shrink:0;">👤</div>
+                <div style="flex:1;">
+                    <div style="font-weight:700;font-size:0.95rem;color:var(--text);">{p['nom']}</div>
+                    <div style="font-size:0.75rem;color:var(--text2);">📞 {tel}</div>
+                </div>
+                <div style="background:rgba(124,58,237,0.15);border:1px solid var(--border);
+                    border-radius:20px;padding:3px 12px;font-size:0.72rem;font-weight:700;color:var(--v2);">
+                    {nb} course{"s" if nb>1 else ""}
+                </div>
+            </div>
+            {courses_html}
+        </div>""", unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
     back_to_home()
 
@@ -582,8 +641,8 @@ def p_analyse():
     df=build_df(courses)
     if df.empty:
         st.info("Aucune donnée. Enregistrez des courses d'abord.")
-        st.markdown('</div>', unsafe_allow_html=True)
         back_to_home()
+        st.markdown('</div>', unsafe_allow_html=True)
         return
 
     s=stats_generales(df)
@@ -662,6 +721,12 @@ def p_analyse():
         if res2:
             fig2,a2,b2,r22=res2
             st.plotly_chart(fig2, use_container_width=True, key="reg_ia")
+            st.markdown(f"""
+            <div class="card"><div class="clbl">📐 Équation Apprise</div>
+            <div style="text-align:center;padding:16px;background:var(--card2);border-radius:10px;">
+                <div style="font-size:1.3rem;font-weight:800;color:#A78BFA;">Prix = {a2:.1f}x + {b2:.1f}</div>
+                <div style="font-size:0.78rem;color:var(--text2);margin-top:4px;">R² = {r22:.3f} · Précision : {round(r22*100,1)}%</div>
+            </div></div>""", unsafe_allow_html=True)
 
     st.download_button("⬇️ Télécharger CSV",
         data=df.to_csv(index=False, encoding="utf-8"),
@@ -670,50 +735,7 @@ def p_analyse():
     back_to_home()
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ── LISTE PASSAGERS ─────────────────────────────────
-def p_liste_passagers():
-    st.markdown('<div class="page">', unsafe_allow_html=True)
-    st.markdown('<div style="font-size:1.3rem;font-weight:800;margin-bottom:14px;">👥 Liste des Passagers</div>', unsafe_allow_html=True)
-    courses=get_courses()
-    # Grouper par passager
-    passagers={}
-    for c in courses:
-        tel=c.get("tel","?")
-        if tel not in passagers:
-            passagers[tel]={"nom":c.get("nom","?"),"tel":tel,"courses":[]}
-        passagers[tel]["courses"].append(c)
-
-    if not passagers:
-        st.info("Aucun passager enregistré.")
-    for tel,p in passagers.items():
-        nb=len(p["courses"])
-        st.markdown(f"""
-        <div class="list-item">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                <div style="width:40px;height:40px;border-radius:50%;
-                    background:rgba(124,58,237,0.2);display:flex;align-items:center;
-                    justify-content:center;font-size:1.2rem;">👤</div>
-                <div>
-                    <div style="font-weight:700;font-size:0.95rem;color:var(--text);">{p['nom']}</div>
-                    <div style="font-size:0.75rem;color:var(--text2);">📞 {tel}</div>
-                </div>
-                <div style="margin-left:auto;background:rgba(124,58,237,0.15);
-                    border:1px solid var(--border);border-radius:20px;
-                    padding:3px 12px;font-size:0.72rem;font-weight:700;color:var(--v2);">
-                    {nb} course{"s" if nb>1 else ""}
-                </div>
-            </div>
-            <div class="chips">""", unsafe_allow_html=True)
-        for c in p["courses"]:
-            s=c.get("statut","")
-            bcls="chip-g" if s=="terminee" else "chip"
-            st.markdown(f'<span class="{bcls}">📍{c.get("depart","?")}→🏁{c.get("arrivee","?")} · {c.get("prix",0):,} FCFA</span>', unsafe_allow_html=True)
-        st.markdown('</div></div>', unsafe_allow_html=True)
-
-    back_to_home()
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# ── CHAUFFEUR LOGIN ──────────────────────────────────
+# ── CHAUFFEUR ────────────────────────────────────────
 def c_login():
     st.markdown('<div class="page">', unsafe_allow_html=True)
     li=f'<img src="{logo_src}" style="width:64px;filter:drop-shadow(0 0 12px rgba(124,58,237,0.6));animation:float 3s ease-in-out infinite;"/>' if logo_src else "🚖"
@@ -764,15 +786,13 @@ def c_login():
     back_to_home()
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ── CHAUFFEUR ACCUEIL ────────────────────────────────
 def c_accueil():
     ch=st.session_state.chauffeur
     dispos=get_courses_disponibles()
     mes=get_courses_chauffeur(ch['nom'])
     done=[c for c in mes if c['statut']=='terminee']
     encours=[c for c in mes if c['statut']=='en_cours']
-
-    li=f'<img src="{logo_src}" style="width:32px;vertical-align:middle;margin-right:6px;"/>' if logo_src else "🚖"
+    li=f'<img src="{logo_src}" style="width:28px;vertical-align:middle;margin-right:6px;"/>' if logo_src else "🚖"
     st.markdown(f"""
     <div class="page">
     <div class="hero-card">
@@ -814,8 +834,6 @@ def c_courses():
     if not dispos:
         st.info("Aucune course disponible pour le moment.")
     for c in dispos:
-        ref=c.get('id','')
-        ts=c.get('timestamp','')
         st.markdown(f"""
         <div class="ccard">
             <span class="badge2 bd">Disponible</span>
@@ -831,7 +849,7 @@ def c_courses():
                 <span class="chip">{c.get('meteo','?')}</span>
                 <span class="chip">💵 {c.get('prix',0):,} FCFA</span>
             </div>
-            <div style="font-size:0.68rem;color:var(--text2);">Réf : {ref} · {ts}</div>
+            <div style="font-size:0.68rem;color:var(--text2);">Réf : {c.get('id','')} · {c.get('timestamp','')}</div>
         </div>""", unsafe_allow_html=True)
         if st.button(f"✅ Accepter — {c['id']}", key=f"acc_{c['id']}", use_container_width=True):
             if accepter_course(c["id"],ch["nom"],ch["tel"]):
@@ -864,11 +882,55 @@ def c_mes_trajets():
                 <span class="chip chip-g">📞 {c.get('tel','?')}</span>
                 <span class="chip">💵 {c.get('prix',0):,} FCFA</span>
             </div>
-            <div style="font-size:0.68rem;color:var(--text2);">Réf : {c['id']}</div>
+            <div style="font-size:0.68rem;color:var(--text2);">Réf : {c.get('id','')}</div>
         </div>""", unsafe_allow_html=True)
         if s=="en_cours":
             if st.button(f"🏁 Terminer", key=f"dn_{c['id']}", use_container_width=True):
                 terminer_course(c["id"]); st.success("✅ Terminée !"); st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
+
+def c_liste_chauffeurs():
+    st.markdown('<div class="page">', unsafe_allow_html=True)
+    st.markdown('<div style="font-size:1.3rem;font-weight:800;margin-bottom:14px;">🚘 Liste des Chauffeurs</div>', unsafe_allow_html=True)
+    chauffeurs=get_chauffeurs()
+    if not chauffeurs:
+        st.info("Aucun chauffeur enregistré.")
+    for ch in chauffeurs:
+        mes=get_courses_chauffeur(ch['nom'])
+        done=[c for c in mes if c['statut']=='terminee']
+        encours=[c for c in mes if c['statut']=='en_cours']
+        courses_html=""
+        for c in encours:
+            courses_html+=f"""
+            <div style="padding:8px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.3);
+                border-radius:8px;margin-bottom:4px;font-size:0.75rem;">
+                🚗 En cours · 👤 {c.get('nom','?')} · 📍{c.get('depart','?')}→🏁{c.get('arrivee','?')} · {c.get('prix',0):,} FCFA
+            </div>"""
+        for c in done[-3:]:
+            courses_html+=f"""
+            <div style="padding:6px 8px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);
+                border-radius:8px;margin-bottom:4px;font-size:0.72rem;color:#10B981;">
+                ✓ {c.get('depart','?')}→{c.get('arrivee','?')} · {c.get('prix',0):,} FCFA
+            </div>"""
+
+        st.markdown(f"""
+        <div class="list-item">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <div style="width:44px;height:44px;border-radius:50%;
+                    background:rgba(124,58,237,0.2);display:flex;align-items:center;
+                    justify-content:center;font-size:1.3rem;flex-shrink:0;">🚖</div>
+                <div style="flex:1;">
+                    <div style="font-weight:700;font-size:0.95rem;color:var(--text);">{ch['nom']}</div>
+                    <div style="font-size:0.75rem;color:var(--text2);">📞 {ch['tel']} · 🚗 {ch['immat']}</div>
+                </div>
+                <div style="text-align:right;">
+                    <div style="font-size:0.72rem;font-weight:700;color:var(--v2);">{len(mes)} course{"s" if len(mes)>1 else ""}</div>
+                    <div style="font-size:0.68rem;color:var(--text2);">{sum(c.get('prix',0) for c in done):,} FCFA</div>
+                </div>
+            </div>
+            {courses_html if courses_html else '<div style="font-size:0.72rem;color:var(--text2);">Aucune course pour le moment.</div>'}
+        </div>""", unsafe_allow_html=True)
+    back_to_home()
     st.markdown('</div>', unsafe_allow_html=True)
 
 def c_profil():
@@ -884,7 +946,9 @@ def c_profil():
             background-clip:text;">{ch['nom']}</div>
         <div style="font-size:0.82rem;color:var(--text2);margin-top:6px;">📞 {ch['tel']}</div>
         <div style="font-size:0.82rem;color:var(--text2);">🚗 {ch['immat']}</div>
-        <div style="font-size:0.72rem;color:var(--text2);margin-top:4px;">ID : {ch['id']} · {ch.get('date_inscription','—')[:10]}</div>
+        <div style="font-size:0.72rem;color:var(--text2);margin-top:4px;">
+            ID : {ch['id']} · {ch.get('date_inscription','—')[:10]}
+        </div>
     </div>
     <div class="sg">
         <div class="scard"><span class="scard-num">{len(mes)}</span><div class="scard-lbl">Total</div>
@@ -894,7 +958,8 @@ def c_profil():
         <div class="scard" style="grid-column:span 2;">
             <span class="scard-num">{sum(c.get('prix',0) for c in done):,}</span>
             <div class="scard-lbl">FCFA Encaissés</div>
-            <div class="scard-bar" style="background:linear-gradient(90deg,#F59E0B,#D97706);"></div></div>
+            <div class="scard-bar" style="background:linear-gradient(90deg,#F59E0B,#D97706);"></div>
+        </div>
     </div>
     </div>""", unsafe_allow_html=True)
     back_to_home()
@@ -903,76 +968,30 @@ def c_profil():
         st.session_state.role=None
         st.rerun()
 
-# ── LISTE CHAUFFEURS ─────────────────────────────────
-def c_liste_chauffeurs():
-    st.markdown('<div class="page">', unsafe_allow_html=True)
-    st.markdown('<div style="font-size:1.3rem;font-weight:800;margin-bottom:14px;">🚖 Liste des Chauffeurs</div>', unsafe_allow_html=True)
-    chauffeurs=get_chauffeurs()
-    if not chauffeurs:
-        st.info("Aucun chauffeur enregistré.")
-    for ch in chauffeurs:
-        mes=get_courses_chauffeur(ch['nom'])
-        done=[c for c in mes if c['statut']=='terminee']
-        encours=[c for c in mes if c['statut']=='en_cours']
-        st.markdown(f"""
-        <div class="list-item">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
-                <div style="width:44px;height:44px;border-radius:50%;
-                    background:rgba(124,58,237,0.2);display:flex;align-items:center;
-                    justify-content:center;font-size:1.3rem;">🚖</div>
-                <div style="flex:1;">
-                    <div style="font-weight:700;font-size:0.95rem;color:var(--text);">{ch['nom']}</div>
-                    <div style="font-size:0.75rem;color:var(--text2);">📞 {ch['tel']} · 🚗 {ch['immat']}</div>
-                </div>
-                <div style="text-align:right;">
-                    <div style="font-size:0.72rem;font-weight:700;color:var(--v2);">{len(mes)} course{"s" if len(mes)>1 else ""}</div>
-                    <div style="font-size:0.68rem;color:var(--text2);">{sum(c.get('prix',0) for c in done):,} FCFA</div>
-                </div>
-            </div>""", unsafe_allow_html=True)
-        if encours:
-            st.markdown('<div style="margin-bottom:6px;">', unsafe_allow_html=True)
-            for c in encours:
-                st.markdown(f"""
-                <div style="padding:8px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.3);
-                    border-radius:8px;margin-bottom:4px;font-size:0.75rem;">
-                    🚗 En cours · 👤 {c.get('nom','?')} · 📍{c.get('depart','?')}→🏁{c.get('arrivee','?')} · {c.get('prix',0):,} FCFA
-                </div>""", unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
-        if done:
-            st.markdown('<div style="margin-bottom:4px;font-size:0.68rem;color:var(--text2);">Courses terminées :</div>', unsafe_allow_html=True)
-            for c in done[-3:]:
-                st.markdown(f"""
-                <div class="chips">
-                    <span class="chip chip-g">✓ {c.get('depart','?')}→{c.get('arrivee','?')} · {c.get('prix',0):,} FCFA</span>
-                </div>""", unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
-    back_to_home()
-    st.markdown('</div>', unsafe_allow_html=True)
-
 # ── ROUTING ──────────────────────────────────────────
 topbar()
-role=st.session_state.role
+role = st.session_state.role
 
 if role is None:
     page_accueil()
 
-elif role=="passager":
-    pg=st.session_state.page_passager
-    if pg=="accueil":           p_accueil()
-    elif pg=="collecte":        p_collecte()
-    elif pg=="mes_courses":     p_mes_courses()
-    elif pg=="analyse":         p_analyse()
-    elif pg=="liste_passagers": p_liste_passagers()
-    bottom_nav_p(pg)
+elif role == "passager":
+    pg = st.session_state.page_passager
+    nav_passager(pg)
+    if pg == "accueil":           p_accueil()
+    elif pg == "collecte":        p_collecte()
+    elif pg == "mes_courses":     p_mes_courses()
+    elif pg == "liste_passagers": p_liste_passagers()
+    elif pg == "analyse":         p_analyse()
 
-elif role=="chauffeur":
+elif role == "chauffeur":
     if not st.session_state.chauffeur:
         c_login()
     else:
-        pg=st.session_state.page_chauffeur
-        if pg=="c_accueil":         c_accueil()
-        elif pg=="c_courses":       c_courses()
-        elif pg=="c_mes":           c_mes_trajets()
-        elif pg=="c_profil":        c_profil()
-        elif pg=="c_liste":         c_liste_chauffeurs()
-        bottom_nav_c(pg)
+        pg = st.session_state.page_chauffeur
+        nav_chauffeur(pg)
+        if pg == "c_accueil":  c_accueil()
+        elif pg == "c_courses": c_courses()
+        elif pg == "c_mes":    c_mes_trajets()
+        elif pg == "c_liste":  c_liste_chauffeurs()
+        elif pg == "c_profil": c_profil()
