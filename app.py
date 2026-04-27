@@ -297,23 +297,142 @@ def _render_nav(tabs, keys_prefix, session_key):
     st.markdown('</div>', unsafe_allow_html=True)
 
 def nav_passager(active):
-    _render_nav([
-        ("🏠","ACCUEIL",    "accueil",        "#A78BFA"),
-        ("📝","COLLECTE",   "collecte",        "#FCA5A5"),
-        ("📋","COURSES",    "mes_courses",     "#FCD34D"),
-        ("👥","PASSAGERS",  "liste_passagers", "#6EE7B7"),
-        ("📊","ANALYSE",    "analyse",         "#F9A8D4"),
-    ], "p", "page_passager")
+    TABS = [
+        ("🏠", "ACCUEIL", "accueil", "#A78BFA"),
+        ("📝", "COLLECTE", "collecte", "#FCA5A5"),
+        ("📋", "COURSES", "mes_courses", "#FCD34D"),
+        ("👥", "PASSAGERS", "liste_passagers", "#6EE7B7"),
+        ("📊", "ANALYSE", "analyse", "#F9A8D4"),
+    ]
+    
+    # Style global de la tabbar (Modification ici pour forcer la ligne unique)
+    st.markdown("""
+    <style>
+    div[data-testid="stHorizontalBlock"] {
+        background: #1A1A2E;
+        border: 1.5px solid rgba(124,58,237,0.4);
+        border-radius: 18px;
+        padding: 4px !important;
+        gap: 2px !important;
+        margin: 5px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important; /* Empêche le passage à la ligne */
+        align-items: center !important;
+    }
+    div[data-testid="column"] {
+        flex: 1 1 0% !important;
+        min-width: 0 !important;
+        padding: 0 !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    cols = st.columns(5)
+    for i, (icon, lbl, key, color) in enumerate(TABS):
+        is_on = active == key
+        bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.18)" if is_on else "transparent"
+        border = f"2px solid {color}" if is_on else "2px solid transparent"
+        glow = f"0 0 12px {color}55" if is_on else "none"
+        txt = color if is_on else "#94A3B8"
+
+        with cols[i]:
+            st.markdown(f"""
+            <style>
+            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button {{
+                background: {bg} !important;
+                border: {border} !important;
+                color: {txt} !important;
+                box-shadow: {glow} !important;
+                border-radius: 12px !important;
+                height: 60px !important; /* Taille ajustée pour mobile */
+                width: 100% !important;
+                font-family: 'Poppins', sans-serif !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 2px !important;
+                transition: all 0.2s !important;
+                line-height: 1.1 !important;
+            }}
+            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button p {{
+                font-size: 0.8rem !important; /* Taille de l'icône */
+                margin: 0 !important;
+            }}
+            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button span {{
+                font-size: 0.45rem !important; /* Taille du texte */
+                font-weight: 800 !important;
+                text-transform: uppercase !important;
+                color: {txt} !important;
+                display: block !important;
+            }}
+            </style>""", unsafe_allow_html=True)
+
+            if st.button(f"{icon}\n{lbl}", key=f"ptab_{key}", use_container_width=True):
+                st.session_state.page_passager = key
+                if key == "collecte":
+                    st.session_state.step = 1
+                    st.session_state.form = {}
+                    st.session_state.submitted = False
+                st.rerun()
 
 def nav_chauffeur(active):
-    _render_nav([
-        ("🏠","ACCUEIL",    "c_accueil", "#A78BFA"),
-        ("🚖","COURSES",    "c_courses", "#FCA5A5"),
-        ("📋","TRAJETS",    "c_mes",     "#FCD34D"),
-        ("🚘","CHAUFFEURS", "c_liste",   "#6EE7B7"),
-        ("👤","PROFIL",     "c_profil",  "#F9A8D4"),
-    ], "c", "page_chauffeur")
+    TABS = [
+        ("🏠", "ACCUEIL", "c_accueil", "#A78BFA"),
+        ("🚖", "COURSES", "c_courses", "#FCA5A5"),
+        ("📋", "TRAJETS", "c_mes", "#FCD34D"),
+        ("🚘", "CHAUFFEURS", "c_liste", "#6EE7B7"),
+        ("👤", "PROFIL", "c_profil", "#F9A8D4"),
+    ]
+    
+    # Style identique pour la nav chauffeur
+    st.markdown("""
+    <style>
+    div[data-testid="stHorizontalBlock"] {
+        background: #1A1A2E;
+        border: 1.5px solid rgba(124,58,237,0.4);
+        border-radius: 18px;
+        padding: 4px !important;
+        gap: 2px !important;
+        margin: 5px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
+    cols = st.columns(5)
+    for i, (icon, lbl, key, color) in enumerate(TABS):
+        is_on = active == key
+        bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.18)" if is_on else "transparent"
+        border = f"2px solid {color}" if is_on else "2px solid transparent"
+        glow = f"0 0 12px {color}55" if is_on else "none"
+        txt = color if is_on else "#94A3B8"
+
+        with cols[i]:
+            st.markdown(f"""
+            <style>
+            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button {{
+                background: {bg} !important;
+                border: {border} !important;
+                color: {txt} !important;
+                box-shadow: {glow} !important;
+                border-radius: 12px !important;
+                height: 60px !important;
+                width: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 2px !important;
+            }}
+            </style>""", unsafe_allow_html=True)
+
+            if st.button(f"{icon}\n{lbl}", key=f"ctab_{key}", use_container_width=True):
+                st.session_state.page_chauffeur = key
+                st.rerun()
 def stepper(cur):
     steps=[("1","Contexte"),("2","Trajet"),("3","Paiement")]
     h='<div class="stepper">'
