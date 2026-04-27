@@ -296,6 +296,8 @@ def _render_nav(tabs, keys_prefix, session_key):
 
     st.markdown('</div>', unsafe_allow_html=True)
 
+import streamlit as st
+
 def nav_passager(active):
     TABS = [
         ("🏠", "ACCUEIL", "accueil", "#A78BFA"),
@@ -305,25 +307,40 @@ def nav_passager(active):
         ("📊", "ANALYSE", "analyse", "#F9A8D4"),
     ]
     
-    # Style global de la tabbar (Modification ici pour forcer la ligne unique)
+    # CSS pour une barre compacte et fine
     st.markdown("""
     <style>
     div[data-testid="stHorizontalBlock"] {
         background: #1A1A2E;
-        border: 1.5px solid rgba(124,58,237,0.4);
-        border-radius: 18px;
+        border: 1.2px solid rgba(124,58,237,0.3);
+        border-radius: 15px;
         padding: 4px !important;
-        gap: 2px !important;
-        margin: 5px !important;
+        gap: 4px !important;
+        margin: 5px 10px !important;
         display: flex !important;
         flex-direction: row !important;
-        flex-wrap: nowrap !important; /* Empêche le passage à la ligne */
+        flex-wrap: nowrap !important;
         align-items: center !important;
+        height: 55px !important; /* Force la hauteur de la barre entière */
     }
     div[data-testid="column"] {
         flex: 1 1 0% !important;
         min-width: 0 !important;
         padding: 0 !important;
+    }
+    /* Style spécifique pour réduire la taille des boutons à l'intérieur */
+    div[data-testid="stHorizontalBlock"] button {
+        background: transparent !important;
+        border: 1.5px solid transparent !important;
+        border-radius: 10px !important;
+        height: 45px !important; /* Boutons plus courts */
+        width: 100% !important;
+        padding: 0px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.3s !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -331,41 +348,29 @@ def nav_passager(active):
     cols = st.columns(5)
     for i, (icon, lbl, key, color) in enumerate(TABS):
         is_on = active == key
-        bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.18)" if is_on else "transparent"
-        border = f"2px solid {color}" if is_on else "2px solid transparent"
-        glow = f"0 0 12px {color}55" if is_on else "none"
+        bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.15)" if is_on else "transparent"
+        border = f"1.5px solid {color}" if is_on else "1.5px solid transparent"
         txt = color if is_on else "#94A3B8"
 
         with cols[i]:
+            # Injection du style dynamique par bouton
             st.markdown(f"""
             <style>
             div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button {{
                 background: {bg} !important;
                 border: {border} !important;
                 color: {txt} !important;
-                box-shadow: {glow} !important;
-                border-radius: 12px !important;
-                height: 60px !important; /* Taille ajustée pour mobile */
-                width: 100% !important;
-                font-family: 'Poppins', sans-serif !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: center !important;
-                padding: 2px !important;
-                transition: all 0.2s !important;
-                line-height: 1.1 !important;
             }}
             div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button p {{
-                font-size: 0.8rem !important; /* Taille de l'icône */
+                font-size: 0.9rem !important; /* Taille de l'émoji */
                 margin: 0 !important;
+                line-height: 1 !important;
             }}
             div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button span {{
-                font-size: 0.45rem !important; /* Taille du texte */
-                font-weight: 800 !important;
+                font-size: 0.4rem !important; /* Texte très petit pour tenir */
+                font-weight: 700 !important;
                 text-transform: uppercase !important;
-                color: {txt} !important;
-                display: block !important;
+                margin-top: -2px !important;
             }}
             </style>""", unsafe_allow_html=True)
 
@@ -386,18 +391,15 @@ def nav_chauffeur(active):
         ("👤", "PROFIL", "c_profil", "#F9A8D4"),
     ]
     
-    # Style identique pour la nav chauffeur
+    # Même logique de compression pour la version chauffeur
     st.markdown("""
     <style>
     div[data-testid="stHorizontalBlock"] {
         background: #1A1A2E;
-        border: 1.5px solid rgba(124,58,237,0.4);
-        border-radius: 18px;
+        border-radius: 15px;
         padding: 4px !important;
-        gap: 2px !important;
-        margin: 5px !important;
+        height: 55px !important;
         display: flex !important;
-        flex-direction: row !important;
         flex-wrap: nowrap !important;
     }
     </style>
@@ -406,9 +408,8 @@ def nav_chauffeur(active):
     cols = st.columns(5)
     for i, (icon, lbl, key, color) in enumerate(TABS):
         is_on = active == key
-        bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.18)" if is_on else "transparent"
-        border = f"2px solid {color}" if is_on else "2px solid transparent"
-        glow = f"0 0 12px {color}55" if is_on else "none"
+        bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.15)" if is_on else "transparent"
+        border = f"1.5px solid {color}" if is_on else "1.5px solid transparent"
         txt = color if is_on else "#94A3B8"
 
         with cols[i]:
@@ -417,16 +418,8 @@ def nav_chauffeur(active):
             div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button {{
                 background: {bg} !important;
                 border: {border} !important;
+                height: 45px !important;
                 color: {txt} !important;
-                box-shadow: {glow} !important;
-                border-radius: 12px !important;
-                height: 60px !important;
-                width: 100% !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: center !important;
-                padding: 2px !important;
             }}
             </style>""", unsafe_allow_html=True)
 
