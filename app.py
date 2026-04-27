@@ -66,40 +66,44 @@ st.markdown("""
     -webkit-text-fill-color:transparent;background-clip:text;}
 .app-sub{font-size:0.58rem;color:var(--text2);font-style:italic;}
 
-/* TAB BAR - style comme l'image */
-.tabbar{
-    display:flex;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:16px;
-    margin:10px 12px;
-    padding:4px;
-    gap:2px;
-    overflow:hidden;
+/* NAV WRAPPER - zero gap */
+.nav-wrapper{
+    background:var(--dark2);
+    padding:8px 10px 0px 10px;
+    margin:0;
 }
-.tab-item{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:8px 4px;
-    border-radius:12px;
-    cursor:pointer;
-    transition:all 0.25s;
-    gap:3px;
-    min-width:0;
-}
-.tab-item.active{
-    background:linear-gradient(135deg,rgba(167,139,250,0.3),rgba(252,165,165,0.2));
-    border:1.5px solid;
-}
-.tab-icon{font-size:1.2rem;line-height:1;}
-.tab-lbl{font-size:0.52rem;font-weight:700;text-transform:uppercase;
-    letter-spacing:0.3px;white-space:nowrap;overflow:hidden;
-    text-overflow:ellipsis;max-width:100%;}
 
-.page{padding:14px 14px 30px;max-width:700px;margin:0 auto;animation:fadeUp 0.3s ease;}
+/* Streamlit columns zero gap */
+div[data-testid="stHorizontalBlock"]{
+    gap:4px!important;
+    padding:0!important;
+    margin:0!important;
+}
+div[data-testid="column"]{
+    padding:0 2px!important;
+}
+
+/* NAV BUTTONS style tabbar */
+.nav-wrapper div[data-testid="stButton"]>button{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    padding:8px 4px!important;
+    border-radius:12px!important;
+    font-size:0.55rem!important;
+    font-weight:700!important;
+    text-transform:uppercase!important;
+    letter-spacing:0.5px!important;
+    height:62px!important;
+    gap:4px!important;
+    width:100%!important;
+    box-shadow:none!important;
+    transition:all 0.2s!important;
+}
+
+/* PAGE - zero top padding */
+.page{padding:10px 14px 30px;max-width:700px;margin:0 auto;animation:fadeUp 0.3s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
 .hero-role{min-height:85vh;display:flex;flex-direction:column;
@@ -203,6 +207,7 @@ st.markdown("""
     background:var(--grad);-webkit-background-clip:text;
     -webkit-text-fill-color:transparent;background-clip:text;}
 
+/* Boutons normaux */
 div[data-testid="stButton"]>button{
     background:var(--grad)!important;color:#fff!important;border:none!important;
     border-radius:11px!important;font-family:'Poppins',sans-serif!important;
@@ -212,13 +217,14 @@ div[data-testid="stButton"]>button:hover{
     transform:translateY(-2px)!important;
     box-shadow:0 8px 24px rgba(124,58,237,0.6)!important;}
 div[data-testid="stButton"]>button:active{transform:scale(0.97)!important;}
+
 .stSelectbox>div>div,.stNumberInput>div>div>input,.stTextInput>div>div>input{
     background:var(--card2)!important;border:1.5px solid var(--border)!important;
     border-radius:10px!important;color:var(--text)!important;}
 .stTabs [data-baseweb="tab-list"]{background:var(--card2)!important;border-radius:10px!important;padding:4px!important;}
 .stTabs [data-baseweb="tab"]{border-radius:8px!important;color:var(--text2)!important;font-weight:600!important;}
 .stTabs [aria-selected="true"]{background:var(--grad)!important;color:#fff!important;}
-hr{border:none;height:1px;background:var(--border);margin:12px 0;}
+hr{border:none;height:1px;background:var(--border);margin:10px 0;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -247,60 +253,47 @@ def nav_passager(active):
         ("👥","Passagers",  "liste_passagers", "#6EE7B7"),
         ("📊","Analyse",    "analyse",         "#F9A8D4"),
     ]
-    html = '<div class="tabbar">'
-    for icon, lbl, key, color in TABS:
-        is_on = active == key
-        border = f"border-color:{color};" if is_on else "border:1.5px solid transparent;"
-        bg = f"background:rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.18);" if is_on else ""
-        glow = f"box-shadow:0 0 10px {color}50;" if is_on else ""
-        lbl_color = color if is_on else "var(--text2)"
-        html += f"""<div class="tab-item {'active' if is_on else ''}"
-            style="{border}{bg}{glow}">
-            <span class="tab-icon">{icon}</span>
-            <span class="tab-lbl" style="color:{lbl_color};">{lbl}</span>
-        </div>"""
-    html += '</div>'
-    st.markdown(html, unsafe_allow_html=True)
-
-    # Boutons streamlit cachés pour la navigation
-    st.markdown('<div style="position:fixed;opacity:0;pointer-events:none;height:1px;overflow:hidden;top:-100px">', unsafe_allow_html=True)
-    cols = st.columns(5)
-    for i, (_, lbl, key, _) in enumerate(TABS):
-        with cols[i]:
-            if st.button(lbl, key=f"pnav_{key}"):
-                st.session_state.page_passager = key
-                if key == "collecte":
-                    st.session_state.step=1
-                    st.session_state.form={}
-                    st.session_state.submitted=False
-                st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
-
-    # Zone cliquable réelle au-dessus de la tabbar HTML
+    st.markdown('<div class="nav-wrapper">', unsafe_allow_html=True)
     st.markdown("""
     <style>
-    .tab-click-row{display:flex;gap:2px;margin:-52px 12px 0;height:52px;position:relative;z-index:10;}
-    .tab-click-zone{flex:1;cursor:pointer;}
-    </style>
-    <div class="tab-click-row">
-    """, unsafe_allow_html=True)
-
-    cols2 = st.columns(5)
-    KEYS = [k for _,_,k,_ in TABS]
-    for i, (_, lbl, key, color) in enumerate(TABS):
-        with cols2[i]:
+    .nav-wrapper + div div[data-testid="stHorizontalBlock"]{
+        background:var(--card);
+        border:1px solid var(--border);
+        border-radius:16px;
+        padding:4px!important;
+        margin:0 0 0 0!important;
+        gap:3px!important;
+    }
+    </style>""", unsafe_allow_html=True)
+    cols = st.columns(5)
+    for i,(icon,lbl,key,color) in enumerate(TABS):
+        is_on = active == key
+        bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.2)" if is_on else "transparent"
+        border = f"2px solid {color}" if is_on else "2px solid transparent"
+        glow = f"0 0 10px {color}50" if is_on else "none"
+        with cols[i]:
             st.markdown(f"""
             <style>
-            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button {{
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                height: 52px !important;
-                opacity: 0 !important;
-                cursor: pointer !important;
+            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) > div > div > div > button {{
+                background: {bg} !important;
+                border: {border} !important;
+                color: {color} !important;
+                box-shadow: {glow} !important;
+                border-radius: 12px !important;
+                height: 62px !important;
+                font-size: 0.52rem !important;
+                font-weight: 700 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 3px !important;
+                padding: 6px 2px !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.3px !important;
             }}
             </style>""", unsafe_allow_html=True)
-            if st.button("_", key=f"ptab_{key}"):
+            if st.button(f"{icon}\n{lbl}", key=f"ptab_{key}", use_container_width=True):
                 st.session_state.page_passager = key
                 if key == "collecte":
                     st.session_state.step=1
@@ -317,38 +310,39 @@ def nav_chauffeur(active):
         ("🚘","Chauffeurs", "c_liste",   "#6EE7B7"),
         ("👤","Profil",     "c_profil",  "#F9A8D4"),
     ]
-    html = '<div class="tabbar">'
-    for icon, lbl, key, color in TABS:
-        is_on = active == key
-        border = f"border-color:{color};" if is_on else "border:1.5px solid transparent;"
-        bg = f"background:rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.18);" if is_on else ""
-        glow = f"box-shadow:0 0 10px {color}50;" if is_on else ""
-        lbl_color = color if is_on else "var(--text2)"
-        html += f"""<div class="tab-item {'active' if is_on else ''}"
-            style="{border}{bg}{glow}">
-            <span class="tab-icon">{icon}</span>
-            <span class="tab-lbl" style="color:{lbl_color};">{lbl}</span>
-        </div>"""
-    html += '</div>'
-    st.markdown(html, unsafe_allow_html=True)
-
+    st.markdown('<div class="nav-wrapper">', unsafe_allow_html=True)
     cols = st.columns(5)
-    for i, (_, lbl, key, color) in enumerate(TABS):
+    for i,(icon,lbl,key,color) in enumerate(TABS):
+        is_on = active == key
+        bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.2)" if is_on else "transparent"
+        border = f"2px solid {color}" if is_on else "2px solid transparent"
+        glow = f"0 0 10px {color}50" if is_on else "none"
         with cols[i]:
             st.markdown(f"""
             <style>
-            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button {{
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                height: 52px !important;
-                opacity: 0 !important;
-                cursor: pointer !important;
+            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) > div > div > div > button {{
+                background: {bg} !important;
+                border: {border} !important;
+                color: {color} !important;
+                box-shadow: {glow} !important;
+                border-radius: 12px !important;
+                height: 62px !important;
+                font-size: 0.52rem !important;
+                font-weight: 700 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                gap: 3px !important;
+                padding: 6px 2px !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.3px !important;
             }}
             </style>""", unsafe_allow_html=True)
-            if st.button("_", key=f"ctab_{key}"):
+            if st.button(f"{icon}\n{lbl}", key=f"ctab_{key}", use_container_width=True):
                 st.session_state.page_chauffeur = key
                 st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 def stepper(cur):
     steps=[("1","Contexte"),("2","Trajet"),("3","Paiement")]
@@ -457,27 +451,31 @@ def _step1():
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('<div class="card"><div class="clbl">🌤️ Météo</div>', unsafe_allow_html=True)
     meteo=f.get("meteo",METEOS[0])
-    for i,m in enumerate(st.columns(2)):
-        with m:
-            if i<len(METEOS) and st.button(("✅ " if meteo==METEOS[i] else "")+METEOS[i],key=f"m{i}",use_container_width=True):
-                st.session_state.form["meteo"]=METEOS[i]; st.rerun()
-    for i,m in enumerate(st.columns(2)):
-        with m:
-            j=i+2
-            if j<len(METEOS) and st.button(("✅ " if meteo==METEOS[j] else "")+METEOS[j],key=f"m{j}",use_container_width=True):
-                st.session_state.form["meteo"]=METEOS[j]; st.rerun()
+    c1,c2=st.columns(2)
+    with c1:
+        if st.button(("✅ " if meteo==METEOS[0] else "")+METEOS[0],key="m0",use_container_width=True):
+            st.session_state.form["meteo"]=METEOS[0]; st.rerun()
+        if st.button(("✅ " if meteo==METEOS[2] else "")+METEOS[2],key="m2",use_container_width=True):
+            st.session_state.form["meteo"]=METEOS[2]; st.rerun()
+    with c2:
+        if st.button(("✅ " if meteo==METEOS[1] else "")+METEOS[1],key="m1",use_container_width=True):
+            st.session_state.form["meteo"]=METEOS[1]; st.rerun()
+        if st.button(("✅ " if meteo==METEOS[3] else "")+METEOS[3],key="m3",use_container_width=True):
+            st.session_state.form["meteo"]=METEOS[3]; st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('<div class="card"><div class="clbl">🚦 Trafic</div>', unsafe_allow_html=True)
     trafic=f.get("trafic",TRAFICS[0])
-    for i,m in enumerate(st.columns(2)):
-        with m:
-            if i<len(TRAFICS) and st.button(("✅ " if trafic==TRAFICS[i] else "")+TRAFICS[i],key=f"t{i}",use_container_width=True):
-                st.session_state.form["trafic"]=TRAFICS[i]; st.rerun()
-    for i,m in enumerate(st.columns(2)):
-        with m:
-            j=i+2
-            if j<len(TRAFICS) and st.button(("✅ " if trafic==TRAFICS[j] else "")+TRAFICS[j],key=f"t{j}",use_container_width=True):
-                st.session_state.form["trafic"]=TRAFICS[j]; st.rerun()
+    c1,c2=st.columns(2)
+    with c1:
+        if st.button(("✅ " if trafic==TRAFICS[0] else "")+TRAFICS[0],key="t0",use_container_width=True):
+            st.session_state.form["trafic"]=TRAFICS[0]; st.rerun()
+        if st.button(("✅ " if trafic==TRAFICS[2] else "")+TRAFICS[2],key="t2",use_container_width=True):
+            st.session_state.form["trafic"]=TRAFICS[2]; st.rerun()
+    with c2:
+        if st.button(("✅ " if trafic==TRAFICS[1] else "")+TRAFICS[1],key="t1",use_container_width=True):
+            st.session_state.form["trafic"]=TRAFICS[1]; st.rerun()
+        if st.button(("✅ " if trafic==TRAFICS[3] else "")+TRAFICS[3],key="t3",use_container_width=True):
+            st.session_state.form["trafic"]=TRAFICS[3]; st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('<div class="card"><div class="clbl">🕐 Plage Horaire</div>', unsafe_allow_html=True)
     field("Sélectionnez une plage horaire")
@@ -507,18 +505,17 @@ def _step2():
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('<div class="card"><div class="clbl">📏 Distance Estimée</div>', unsafe_allow_html=True)
     dist=f.get("distance",DISTANCES[1])
-    for i,m in enumerate(st.columns(2)):
-        with m:
-            if i<len(DISTANCES) and st.button(("✅ " if dist==DISTANCES[i] else "")+DISTANCES[i],key=f"d{i}",use_container_width=True):
-                st.session_state.form["distance"]=DISTANCES[i]; st.rerun()
-    for i,m in enumerate(st.columns(2)):
-        with m:
-            j=i+2
-            if j<len(DISTANCES) and st.button(("✅ " if dist==DISTANCES[j] else "")+DISTANCES[j],key=f"d{j}",use_container_width=True):
-                st.session_state.form["distance"]=DISTANCES[j]; st.rerun()
-    # 5ème distance
-    if st.button(("✅ " if dist==DISTANCES[4] else "")+DISTANCES[4],key="d4",use_container_width=True):
-        st.session_state.form["distance"]=DISTANCES[4]; st.rerun()
+    c1,c2=st.columns(2)
+    with c1:
+        for i in [0,2,4]:
+            if i < len(DISTANCES):
+                if st.button(("✅ " if dist==DISTANCES[i] else "")+DISTANCES[i],key=f"d{i}",use_container_width=True):
+                    st.session_state.form["distance"]=DISTANCES[i]; st.rerun()
+    with c2:
+        for i in [1,3]:
+            if i < len(DISTANCES):
+                if st.button(("✅ " if dist==DISTANCES[i] else "")+DISTANCES[i],key=f"d{i}",use_container_width=True):
+                    st.session_state.form["distance"]=DISTANCES[i]; st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
     cb,cn=st.columns(2)
     with cb:
@@ -605,10 +602,10 @@ def p_mes_courses():
                     <span class="rpt">🏁 {c.get('arrivee','?')}</span></div>
                 <div class="chips"><span class="chip">💵 {c.get('prix',0):,} FCFA</span>
                     <span class="chip">📏 {c.get('distance','?')}</span>{ch_info}</div>
-                <div style="font-size:0.64rem;color:var(--text2);">Réf:{c.get('id','')} · {c.get('timestamp','')}</div>
+                <div style="font-size:0.62rem;color:var(--text2);">Réf:{c.get('id','')} · {c.get('timestamp','')}</div>
             </div>""", unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
     back_to_home()
+    st.markdown('</div>', unsafe_allow_html=True)
 
 def p_liste_passagers():
     st.markdown('<div class="page">', unsafe_allow_html=True)
@@ -638,11 +635,9 @@ def p_liste_passagers():
         for c in p["courses"]:
             s=c.get("statut","")
             row_cls="course-row-enc" if s=="en_cours" else ("course-row-done" if s=="terminee" else "")
-            badge_txt="En cours" if s=="en_cours" else ("Terminée" if s=="terminee" else "En attente")
             badge_cls="bc" if s=="en_cours" else ("bt" if s=="terminee" else "bd")
-            ch_line=""
-            if c.get("chauffeur"):
-                ch_line=f'<div style="font-size:0.68rem;color:#10B981;margin-top:3px;">🚖 {c["chauffeur"]} · 📞 {c.get("tel_chauffeur","—")}</div>'
+            badge_txt="En cours" if s=="en_cours" else ("Terminée" if s=="terminee" else "En attente")
+            ch_line=f'<div style="font-size:0.68rem;color:#10B981;margin-top:3px;">🚖 {c["chauffeur"]} · 📞 {c.get("tel_chauffeur","—")}</div>' if c.get("chauffeur") else ""
             st.markdown(f"""<div class="course-row {row_cls}">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                     <span style="font-size:0.76rem;font-weight:600;color:var(--text);">
@@ -664,8 +659,8 @@ def p_analyse():
     st.markdown(f'<div style="color:var(--text2);font-size:0.74rem;margin-bottom:12px;">{COURS}</div>', unsafe_allow_html=True)
     df=build_df(get_courses())
     if df.empty:
-        st.info("Aucune donnée. Enregistrez des courses d'abord.")
-        back_to_home(); st.markdown('</div>', unsafe_allow_html=True); return
+        st.info("Aucune donnée."); back_to_home()
+        st.markdown('</div>', unsafe_allow_html=True); return
     s=stats_generales(df)
     st.markdown(f"""<div class="sg">
         <div class="scard"><div class="scard-icon" style="background:rgba(124,58,237,0.2);">📊</div>
@@ -722,10 +717,10 @@ def p_analyse():
         if res2:
             fig2,a2,b2,r22=res2
             st.plotly_chart(fig2,use_container_width=True,key="reg_ia")
-            st.markdown(f"""<div class="card"><div class="clbl">📐 Modèle Appris</div>
+            st.markdown(f"""<div class="card"><div class="clbl">📐 Modèle</div>
                 <div style="text-align:center;padding:12px;background:var(--card2);border-radius:8px;">
                     <div style="font-size:1.1rem;font-weight:800;color:#A78BFA;">Prix = {a2:.1f}x + {b2:.1f}</div>
-                    <div style="font-size:0.72rem;color:var(--text2);margin-top:3px;">R² = {r22:.3f} · Précision : {round(r22*100,1)}%</div>
+                    <div style="font-size:0.72rem;color:var(--text2);margin-top:3px;">R² = {r22:.3f} · {round(r22*100,1)}%</div>
                 </div></div>""", unsafe_allow_html=True)
     st.download_button("⬇️ CSV",data=df.to_csv(index=False,encoding="utf-8"),
         file_name=f"ubandrive_{datetime.now().strftime('%Y%m%d')}.csv",mime="text/csv",key="dl_csv")
@@ -754,7 +749,7 @@ def c_login():
             if tel.strip():
                 ch=get_chauffeur_by_tel(tel.strip())
                 if ch: st.session_state.chauffeur=ch; st.session_state.page_chauffeur="c_accueil"; st.rerun()
-                else: st.error("❌ Numéro non trouvé. Inscrivez-vous.")
+                else: st.error("❌ Numéro non trouvé.")
             else: st.error("⚠️ Entrez votre numéro.")
         st.markdown('</div>', unsafe_allow_html=True)
     with t2:
@@ -811,7 +806,9 @@ def c_accueil():
         <div class="scard"><div class="scard-icon" style="background:rgba(245,158,11,0.2);">💵</div>
             <span class="scard-num">{sum(c.get('prix',0) for c in done):,}</span><div class="scard-lbl">FCFA</div>
             <div class="scard-bar" style="background:linear-gradient(90deg,#F59E0B,#D97706);"></div></div>
-    </div></div>""", unsafe_allow_html=True)
+    </div>
+    </div>""", unsafe_allow_html=True)
+    back_to_home()
 
 def c_courses():
     ch=st.session_state.chauffeur
@@ -838,6 +835,7 @@ def c_courses():
             if accepter_course(c["id"],ch["nom"],ch["tel"]):
                 st.success(f"🎉 Contactez {c.get('nom','le passager')} au {c.get('tel','—')}"); st.rerun()
             else: st.error("❌ Course déjà prise !")
+    back_to_home()
     st.markdown('</div>', unsafe_allow_html=True)
 
 def c_mes_trajets():
@@ -862,6 +860,7 @@ def c_mes_trajets():
         if s=="en_cours":
             if st.button(f"🏁 Terminer",key=f"dn_{c['id']}",use_container_width=True):
                 terminer_course(c["id"]); st.success("✅ Terminée !"); st.rerun()
+    back_to_home()
     st.markdown('</div>', unsafe_allow_html=True)
 
 def c_liste_chauffeurs():
@@ -927,7 +926,8 @@ def c_profil():
             <div class="scard-lbl">FCFA Encaissés</div>
             <div class="scard-bar" style="background:linear-gradient(90deg,#F59E0B,#D97706);"></div>
         </div>
-    </div></div>""", unsafe_allow_html=True)
+    </div>
+    </div>""", unsafe_allow_html=True)
     back_to_home()
     if st.button("🚪 Se déconnecter",use_container_width=True,key="logout"):
         st.session_state.chauffeur=None; st.session_state.role=None; st.rerun()
