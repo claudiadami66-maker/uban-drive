@@ -53,7 +53,6 @@ st.markdown("""
 .main .block-container{padding:0!important;max-width:100%!important;}
 [data-testid="stSidebar"],header[data-testid="stHeader"],footer,#MainMenu{display:none!important;}
 
-/* TOPBAR */
 .topbar{background:var(--dark2);border-bottom:1px solid var(--border);
     padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
     position:sticky;top:0;z-index:999;}
@@ -66,43 +65,45 @@ st.markdown("""
     -webkit-text-fill-color:transparent;background-clip:text;}
 .app-sub{font-size:0.58rem;color:var(--text2);font-style:italic;}
 
-/* NAV WRAPPER - zero gap */
-.nav-wrapper{
+/* NAV CONTAINER */
+.nav-outer{
     background:var(--dark2);
-    padding:8px 10px 0px 10px;
+    padding:8px 10px 0 10px;
     margin:0;
 }
 
-/* Streamlit columns zero gap */
-div[data-testid="stHorizontalBlock"]{
-    gap:4px!important;
-    padding:0!important;
-    margin:0!important;
+/* Supprimer tout espace Streamlit autour des colonnes nav */
+.nav-outer > div > div[data-testid="stHorizontalBlock"]{
+    background:#1A1A2E !important;
+    border:1.5px solid rgba(124,58,237,0.45) !important;
+    border-radius:18px !important;
+    padding:5px !important;
+    gap:3px !important;
+    margin:0 !important;
 }
-div[data-testid="column"]{
-    padding:0 2px!important;
-}
-
-/* NAV BUTTONS style tabbar */
-.nav-wrapper div[data-testid="stButton"]>button{
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:center!important;
-    justify-content:center!important;
-    padding:8px 4px!important;
-    border-radius:12px!important;
-    font-size:0.55rem!important;
-    font-weight:700!important;
-    text-transform:uppercase!important;
-    letter-spacing:0.5px!important;
-    height:62px!important;
-    gap:4px!important;
-    width:100%!important;
-    box-shadow:none!important;
-    transition:all 0.2s!important;
+.nav-outer > div > div[data-testid="stHorizontalBlock"] > div[data-testid="column"]{
+    padding:0 !important;
+    min-width:0 !important;
 }
 
-/* PAGE - zero top padding */
+/* Boutons nav : icône grande + texte petit en dessous, UNE LIGNE */
+.nav-outer div[data-testid="stButton"] > button{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    height:65px !important;
+    width:100% !important;
+    border-radius:14px !important;
+    padding:4px 2px !important;
+    gap:3px !important;
+    font-size:1.4rem !important;   /* taille emoji */
+    font-weight:800 !important;
+    line-height:1 !important;
+    transition:all 0.2s !important;
+    box-shadow:none !important;
+}
+
 .page{padding:10px 14px 30px;max-width:700px;margin:0 auto;animation:fadeUp 0.3s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
@@ -165,7 +166,6 @@ div[data-testid="column"]{
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
 .scard{background:var(--card);border:1px solid var(--border);border-radius:12px;
     padding:14px;position:relative;overflow:hidden;transition:all 0.3s;}
-.scard:hover{transform:translateY(-2px);}
 .scard-icon{width:36px;height:36px;border-radius:10px;display:flex;
     align-items:center;justify-content:center;font-size:1.1rem;margin-bottom:10px;}
 .scard-num{font-size:1.7rem;font-weight:900;color:var(--text);display:block;line-height:1;}
@@ -175,7 +175,6 @@ div[data-testid="column"]{
 
 .ccard{background:var(--card);border:1px solid var(--border);border-radius:12px;
     padding:13px;margin-bottom:10px;position:relative;}
-.ccard:hover{border-color:var(--v2);}
 .badge2{position:absolute;top:10px;right:10px;padding:2px 9px;border-radius:20px;
     font-size:0.58rem;font-weight:700;text-transform:uppercase;}
 .bd{background:rgba(16,185,129,0.15);color:#10B981;border:1px solid #10B981;}
@@ -217,7 +216,6 @@ div[data-testid="stButton"]>button:hover{
     transform:translateY(-2px)!important;
     box-shadow:0 8px 24px rgba(124,58,237,0.6)!important;}
 div[data-testid="stButton"]>button:active{transform:scale(0.97)!important;}
-
 .stSelectbox>div>div,.stNumberInput>div>div>input,.stTextInput>div>div>input{
     background:var(--card2)!important;border:1.5px solid var(--border)!important;
     border-radius:10px!important;color:var(--text)!important;}
@@ -228,9 +226,7 @@ hr{border:none;height:1px;background:var(--border);margin:10px 0;}
 </style>
 """, unsafe_allow_html=True)
 
-# ────────────────────────────────────────────────────
-# HELPERS
-# ────────────────────────────────────────────────────
+# ── HELPERS ──────────────────────────────────────────
 def topbar():
     li = f'<img src="{logo_src}" class="logo-img"/>' if logo_src else "🚖"
     st.markdown(f"""
@@ -245,104 +241,78 @@ def topbar():
         <div style="font-size:0.62rem;color:var(--text2);">{APP_VERSION}</div>
     </div>""", unsafe_allow_html=True)
 
-def nav_passager(active):
-    TABS = [
-        ("🏠","Accueil",    "accueil",        "#A78BFA"),
-        ("📝","Collecte",   "collecte",        "#FCA5A5"),
-        ("📋","Courses",    "mes_courses",     "#FCD34D"),
-        ("👥","Passagers",  "liste_passagers", "#6EE7B7"),
-        ("📊","Analyse",    "analyse",         "#F9A8D4"),
-    ]
-    st.markdown('<div class="nav-wrapper">', unsafe_allow_html=True)
-    st.markdown("""
-    <style>
-    .nav-wrapper + div div[data-testid="stHorizontalBlock"]{
-        background:var(--card);
-        border:1px solid var(--border);
-        border-radius:16px;
-        padding:4px!important;
-        margin:0 0 0 0!important;
-        gap:3px!important;
-    }
-    </style>""", unsafe_allow_html=True)
-    cols = st.columns(5)
-    for i,(icon,lbl,key,color) in enumerate(TABS):
+def _render_nav(tabs, keys_prefix, session_key):
+    """Rendu navigation : UNE ligne, icône + texte, cliquable"""
+    active = st.session_state[session_key]
+
+    st.markdown('<div class="nav-outer">', unsafe_allow_html=True)
+
+    cols = st.columns(len(tabs))
+    for i, (icon, lbl, key, color) in enumerate(tabs):
         is_on = active == key
-        bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.2)" if is_on else "transparent"
-        border = f"2px solid {color}" if is_on else "2px solid transparent"
-        glow = f"0 0 10px {color}50" if is_on else "none"
+        r,g,b = int(color[1:3],16), int(color[3:5],16), int(color[5:7],16)
+        bg     = f"rgba({r},{g},{b},0.20)" if is_on else "rgba(26,26,46,0.6)"
+        border = f"2px solid {color}"      if is_on else "2px solid transparent"
+        glow   = f"0 0 14px {color}55"     if is_on else "none"
+        txt    = color if is_on else "#94A3B8"
+
         with cols[i]:
+            # Style individuel pour CE bouton dans cette colonne
             st.markdown(f"""
             <style>
-            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) > div > div > div > button {{
+            div[data-testid="stHorizontalBlock"]
+              > div[data-testid="column"]:nth-child({i+1})
+              > div > div > div > button {{
                 background: {bg} !important;
                 border: {border} !important;
-                color: {color} !important;
+                color: {txt} !important;
                 box-shadow: {glow} !important;
-                border-radius: 12px !important;
-                height: 62px !important;
-                font-size: 0.52rem !important;
-                font-weight: 700 !important;
+                border-radius: 13px !important;
+                height: 64px !important;
+                width: 100% !important;
                 display: flex !important;
                 flex-direction: column !important;
                 align-items: center !important;
                 justify-content: center !important;
-                gap: 3px !important;
-                padding: 6px 2px !important;
+                gap: 2px !important;
+                padding: 4px 1px !important;
+                font-size: 0.5rem !important;
+                font-weight: 800 !important;
                 text-transform: uppercase !important;
                 letter-spacing: 0.3px !important;
+                line-height: 1.1 !important;
+                transition: all 0.2s !important;
             }}
             </style>""", unsafe_allow_html=True)
-            if st.button(f"{icon}\n{lbl}", key=f"ptab_{key}", use_container_width=True):
-                st.session_state.page_passager = key
-                if key == "collecte":
-                    st.session_state.step=1
-                    st.session_state.form={}
-                    st.session_state.submitted=False
+
+            label = f"{icon}\n{lbl}"
+            if st.button(label, key=f"{keys_prefix}_{key}", use_container_width=True):
+                st.session_state[session_key] = key
+                if session_key == "page_passager" and key == "collecte":
+                    st.session_state.step = 1
+                    st.session_state.form = {}
+                    st.session_state.submitted = False
                 st.rerun()
+
     st.markdown('</div>', unsafe_allow_html=True)
 
+def nav_passager(active):
+    _render_nav([
+        ("🏠","ACCUEIL",    "accueil",        "#A78BFA"),
+        ("📝","COLLECTE",   "collecte",        "#FCA5A5"),
+        ("📋","COURSES",    "mes_courses",     "#FCD34D"),
+        ("👥","PASSAGERS",  "liste_passagers", "#6EE7B7"),
+        ("📊","ANALYSE",    "analyse",         "#F9A8D4"),
+    ], "p", "page_passager")
+
 def nav_chauffeur(active):
-    TABS = [
-        ("🏠","Accueil",    "c_accueil", "#A78BFA"),
-        ("🚖","Courses",    "c_courses", "#FCA5A5"),
-        ("📋","Trajets",    "c_mes",     "#FCD34D"),
-        ("🚘","Chauffeurs", "c_liste",   "#6EE7B7"),
-        ("👤","Profil",     "c_profil",  "#F9A8D4"),
-    ]
-    st.markdown('<div class="nav-wrapper">', unsafe_allow_html=True)
-    cols = st.columns(5)
-    for i,(icon,lbl,key,color) in enumerate(TABS):
-        is_on = active == key
-        bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.2)" if is_on else "transparent"
-        border = f"2px solid {color}" if is_on else "2px solid transparent"
-        glow = f"0 0 10px {color}50" if is_on else "none"
-        with cols[i]:
-            st.markdown(f"""
-            <style>
-            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) > div > div > div > button {{
-                background: {bg} !important;
-                border: {border} !important;
-                color: {color} !important;
-                box-shadow: {glow} !important;
-                border-radius: 12px !important;
-                height: 62px !important;
-                font-size: 0.52rem !important;
-                font-weight: 700 !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: center !important;
-                gap: 3px !important;
-                padding: 6px 2px !important;
-                text-transform: uppercase !important;
-                letter-spacing: 0.3px !important;
-            }}
-            </style>""", unsafe_allow_html=True)
-            if st.button(f"{icon}\n{lbl}", key=f"ctab_{key}", use_container_width=True):
-                st.session_state.page_chauffeur = key
-                st.rerun()
-    st.markdown('</div>', unsafe_allow_html=True)
+    _render_nav([
+        ("🏠","ACCUEIL",    "c_accueil", "#A78BFA"),
+        ("🚖","COURSES",    "c_courses", "#FCA5A5"),
+        ("📋","TRAJETS",    "c_mes",     "#FCD34D"),
+        ("🚘","CHAUFFEURS", "c_liste",   "#6EE7B7"),
+        ("👤","PROFIL",     "c_profil",  "#F9A8D4"),
+    ], "c", "page_chauffeur")
 
 def stepper(cur):
     steps=[("1","Contexte"),("2","Trajet"),("3","Paiement")]
@@ -357,18 +327,19 @@ def stepper(cur):
     st.markdown(h, unsafe_allow_html=True)
 
 def back_to_home():
-    if st.button("← Changer de profil", key=f"bth_{st.session_state.page_passager}{st.session_state.page_chauffeur}"):
-        st.session_state.role=None; st.session_state.chauffeur=None
-        st.session_state.page_passager="accueil"
-        st.session_state.page_chauffeur="login"
+    pg_p = st.session_state.get("page_passager","")
+    pg_c = st.session_state.get("page_chauffeur","")
+    if st.button("← Changer de profil", key=f"bth_{pg_p}{pg_c}"):
+        st.session_state.role = None
+        st.session_state.chauffeur = None
+        st.session_state.page_passager = "accueil"
+        st.session_state.page_chauffeur = "login"
         st.rerun()
 
 def field(label):
     st.markdown(f'<span class="flbl">{label}</span>', unsafe_allow_html=True)
 
-# ────────────────────────────────────────────────────
-# ACCUEIL CHOIX RÔLE
-# ────────────────────────────────────────────────────
+# ── ACCUEIL ───────────────────────────────────────────
 def page_accueil():
     li = f'<img src="{logo_src}" style="width:90px;filter:drop-shadow(0 0 20px rgba(124,58,237,0.7));animation:float 3s ease-in-out infinite;margin-bottom:14px;"/>' if logo_src else "🚖"
     st.markdown(f"""
@@ -405,14 +376,11 @@ def page_accueil():
             <div style="font-size:0.66rem;color:var(--text2);margin-top:4px;">{COURS} · {UNIVERSITE}</div>
         </div>""", unsafe_allow_html=True)
 
-# ────────────────────────────────────────────────────
-# PASSAGER
-# ────────────────────────────────────────────────────
+# ── PASSAGER ──────────────────────────────────────────
 def p_accueil():
     courses=get_courses(); total=len(courses)
     li=f'<img src="{logo_src}" style="width:26px;vertical-align:middle;margin-right:5px;"/>' if logo_src else "🚖"
-    st.markdown(f"""
-    <div class="page">
+    st.markdown(f"""<div class="page">
     <div class="hero-card">
         <div style="font-size:0.72rem;color:var(--text2);margin-bottom:3px;">Bienvenue sur</div>
         <div style="font-size:1.6rem;font-weight:900;background:var(--grad);
@@ -508,14 +476,13 @@ def _step2():
     c1,c2=st.columns(2)
     with c1:
         for i in [0,2,4]:
-            if i < len(DISTANCES):
+            if i<len(DISTANCES):
                 if st.button(("✅ " if dist==DISTANCES[i] else "")+DISTANCES[i],key=f"d{i}",use_container_width=True):
                     st.session_state.form["distance"]=DISTANCES[i]; st.rerun()
     with c2:
         for i in [1,3]:
-            if i < len(DISTANCES):
-                if st.button(("✅ " if dist==DISTANCES[i] else "")+DISTANCES[i],key=f"d{i}",use_container_width=True):
-                    st.session_state.form["distance"]=DISTANCES[i]; st.rerun()
+            if st.button(("✅ " if dist==DISTANCES[i] else "")+DISTANCES[i],key=f"d{i}",use_container_width=True):
+                st.session_state.form["distance"]=DISTANCES[i]; st.rerun()
     st.markdown('</div>', unsafe_allow_html=True)
     cb,cn=st.columns(2)
     with cb:
@@ -634,16 +601,16 @@ def p_liste_passagers():
             </div>""", unsafe_allow_html=True)
         for c in p["courses"]:
             s=c.get("statut","")
-            row_cls="course-row-enc" if s=="en_cours" else ("course-row-done" if s=="terminee" else "")
-            badge_cls="bc" if s=="en_cours" else ("bt" if s=="terminee" else "bd")
-            badge_txt="En cours" if s=="en_cours" else ("Terminée" if s=="terminee" else "En attente")
+            rc="course-row-enc" if s=="en_cours" else ("course-row-done" if s=="terminee" else "")
+            bc="bc" if s=="en_cours" else ("bt" if s=="terminee" else "bd")
+            bt="En cours" if s=="en_cours" else ("Terminée" if s=="terminee" else "En attente")
             ch_line=f'<div style="font-size:0.68rem;color:#10B981;margin-top:3px;">🚖 {c["chauffeur"]} · 📞 {c.get("tel_chauffeur","—")}</div>' if c.get("chauffeur") else ""
-            st.markdown(f"""<div class="course-row {row_cls}">
+            st.markdown(f"""<div class="course-row {rc}">
                 <div style="display:flex;justify-content:space-between;align-items:center;">
                     <span style="font-size:0.76rem;font-weight:600;color:var(--text);">
                         📍 {c.get('depart','?')} → 🏁 {c.get('arrivee','?')}
                     </span>
-                    <span class="badge2 {badge_cls}" style="position:relative;top:0;right:0;margin-left:6px;">{badge_txt}</span>
+                    <span class="badge2 {bc}" style="position:relative;top:0;right:0;margin-left:6px;">{bt}</span>
                 </div>
                 <div style="font-size:0.68rem;color:var(--text2);margin-top:3px;">
                     💵 {c.get('prix',0):,} FCFA · 📏 {c.get('distance','?')}
@@ -727,9 +694,7 @@ def p_analyse():
     back_to_home()
     st.markdown('</div>', unsafe_allow_html=True)
 
-# ────────────────────────────────────────────────────
-# CHAUFFEUR
-# ────────────────────────────────────────────────────
+# ── CHAUFFEUR ─────────────────────────────────────────
 def c_login():
     st.markdown('<div class="page">', unsafe_allow_html=True)
     li=f'<img src="{logo_src}" style="width:56px;filter:drop-shadow(0 0 10px rgba(124,58,237,0.6));animation:float 3s ease-in-out infinite;"/>' if logo_src else "🚖"
@@ -932,9 +897,7 @@ def c_profil():
     if st.button("🚪 Se déconnecter",use_container_width=True,key="logout"):
         st.session_state.chauffeur=None; st.session_state.role=None; st.rerun()
 
-# ────────────────────────────────────────────────────
-# ROUTING
-# ────────────────────────────────────────────────────
+# ── ROUTING ───────────────────────────────────────────
 topbar()
 role = st.session_state.role
 
