@@ -297,7 +297,6 @@ def _render_nav(tabs, keys_prefix, session_key):
     st.markdown('</div>', unsafe_allow_html=True)
 
 import streamlit as st
-
 def nav_passager(active):
     TABS = [
         ("🏠", "ACCUEIL", "accueil", "#A78BFA"),
@@ -307,40 +306,25 @@ def nav_passager(active):
         ("📊", "ANALYSE", "analyse", "#F9A8D4"),
     ]
     
-    # CSS pour une barre compacte et fine
+    # Style global de la barre
     st.markdown("""
     <style>
     div[data-testid="stHorizontalBlock"] {
         background: #1A1A2E;
-        border: 1.2px solid rgba(124,58,237,0.3);
-        border-radius: 15px;
-        padding: 4px !important;
+        border: 1.5px solid rgba(124,58,237,0.3);
+        border-radius: 18px;
+        padding: 5px !important;
         gap: 4px !important;
         margin: 5px 10px !important;
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         align-items: center !important;
-        height: 55px !important; /* Force la hauteur de la barre entière */
     }
     div[data-testid="column"] {
         flex: 1 1 0% !important;
         min-width: 0 !important;
         padding: 0 !important;
-    }
-    /* Style spécifique pour réduire la taille des boutons à l'intérieur */
-    div[data-testid="stHorizontalBlock"] button {
-        background: transparent !important;
-        border: 1.5px solid transparent !important;
-        border-radius: 10px !important;
-        height: 45px !important; /* Boutons plus courts */
-        width: 100% !important;
-        padding: 0px !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        transition: all 0.3s !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -349,31 +333,43 @@ def nav_passager(active):
     for i, (icon, lbl, key, color) in enumerate(TABS):
         is_on = active == key
         bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.15)" if is_on else "transparent"
-        border = f"1.5px solid {color}" if is_on else "1.5px solid transparent"
+        border = f"2px solid {color}" if is_on else "2px solid transparent"
         txt = color if is_on else "#94A3B8"
 
         with cols[i]:
-            # Injection du style dynamique par bouton
             st.markdown(f"""
             <style>
-            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button {{
+            /* Cible le bouton spécifiquement */
+            div[data-testid="stHorizontalBlock"] div:nth-child({i+1}) button {{
                 background: {bg} !important;
                 border: {border} !important;
                 color: {txt} !important;
+                border-radius: 14px !important;
+                height: 75px !important;
+                width: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 2px !important;
+                white-space: pre-wrap !important; /* Important pour le \n */
+                line-height: 1.2 !important;
             }}
-            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button p {{
-                font-size: 0.9rem !important; /* Taille de l'émoji */
-                margin: 0 !important;
-                line-height: 1 !important;
+            /* Simule la taille différente pour l'icône et le texte via le rendu du texte du bouton */
+            div[data-testid="stHorizontalBlock"] div:nth-child({i+1}) button div[data-testid="stMarkdownContainer"] p {{
+                font-size: 1.4rem !important; /* Taille de l'émoji */
+                font-weight: 900 !important;
             }}
-            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button span {{
-                font-size: 0.4rem !important; /* Texte très petit pour tenir */
-                font-weight: 700 !important;
+            /* On utilise un sélecteur plus précis pour le texte après le retour à la ligne si possible, 
+               sinon on ajuste la globale du bouton */
+            div[data-testid="stHorizontalBlock"] div:nth-child({i+1}) button p {{
+                font-size: 0.55rem !important;
                 text-transform: uppercase !important;
-                margin-top: -2px !important;
+                letter-spacing: 0.5px !important;
             }}
             </style>""", unsafe_allow_html=True)
 
+            # On utilise \n simplement, Streamlit gère mieux ainsi
             if st.button(f"{icon}\n{lbl}", key=f"ptab_{key}", use_container_width=True):
                 st.session_state.page_passager = key
                 if key == "collecte":
@@ -386,19 +382,17 @@ def nav_chauffeur(active):
     TABS = [
         ("🏠", "ACCUEIL", "c_accueil", "#A78BFA"),
         ("🚖", "COURSES", "c_courses", "#FCA5A5"),
-        ("📋", "TRAJETS", "c_mes", "#FCD34D"),
+        ("📋", "TRAJETS", "c_mes",     "#FCD34D"),
         ("🚘", "CHAUFFEURS", "c_liste", "#6EE7B7"),
-        ("👤", "PROFIL", "c_profil", "#F9A8D4"),
+        ("👤", "PROFIL", "c_profil",  "#F9A8D4"),
     ]
     
-    # Même logique de compression pour la version chauffeur
     st.markdown("""
     <style>
     div[data-testid="stHorizontalBlock"] {
         background: #1A1A2E;
-        border-radius: 15px;
-        padding: 4px !important;
-        height: 55px !important;
+        border-radius: 18px;
+        padding: 5px !important;
         display: flex !important;
         flex-wrap: nowrap !important;
     }
@@ -409,45 +403,28 @@ def nav_chauffeur(active):
     for i, (icon, lbl, key, color) in enumerate(TABS):
         is_on = active == key
         bg = f"rgba({int(color[1:3],16)},{int(color[3:5],16)},{int(color[5:7],16)},0.15)" if is_on else "transparent"
-        border = f"1.5px solid {color}" if is_on else "1.5px solid transparent"
+        border = f"2px solid {color}" if is_on else "2px solid transparent"
         txt = color if is_on else "#94A3B8"
 
         with cols[i]:
             st.markdown(f"""
             <style>
-            div[data-testid="stHorizontalBlock"] > div:nth-child({i+1}) button {{
+            div[data-testid="stHorizontalBlock"] div:nth-child({i+1}) button {{
                 background: {bg} !important;
                 border: {border} !important;
-                height: 45px !important;
                 color: {txt} !important;
+                height: 75px !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                white-space: pre-wrap !important;
             }}
             </style>""", unsafe_allow_html=True)
 
             if st.button(f"{icon}\n{lbl}", key=f"ctab_{key}", use_container_width=True):
                 st.session_state.page_chauffeur = key
                 st.rerun()
-def stepper(cur):
-    steps=[("1","Contexte"),("2","Trajet"),("3","Paiement")]
-    h='<div class="stepper">'
-    for i,(n,l) in enumerate(steps):
-        k=i+1
-        cc="active" if k==cur else ("done" if k<cur else "")
-        ct="✓" if k<cur else n
-        h+=f'<div class="step"><div class="sc2 {cc}">{ct}</div><div class="sl2 {cc}">{l}</div></div>'
-        if i<2: h+=f'<div class="sline {"done" if cur>k else ""}"></div>'
-    h+='</div>'
-    st.markdown(h, unsafe_allow_html=True)
-
-def back_to_home():
-    pg_p = st.session_state.get("page_passager","")
-    pg_c = st.session_state.get("page_chauffeur","")
-    if st.button("← Changer de profil", key=f"bth_{pg_p}{pg_c}"):
-        st.session_state.role = None
-        st.session_state.chauffeur = None
-        st.session_state.page_passager = "accueil"
-        st.session_state.page_chauffeur = "login"
-        st.rerun()
-
 def field(label):
     st.markdown(f'<span class="flbl">{label}</span>', unsafe_allow_html=True)
 
@@ -848,6 +825,9 @@ def c_login():
         st.markdown('</div>', unsafe_allow_html=True)
     back_to_home()
     st.markdown('</div>', unsafe_allow_html=True)
+
+def back_to_home():
+    st.session_state.page = "accueil"
 
 def c_accueil():
     ch=st.session_state.chauffeur
